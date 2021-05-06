@@ -37,24 +37,24 @@ Form and compilation of way models
                         / Compiled early, associative references find their referents in the way model
                           before its transformation in later compilations.
                         deem+ `uP` a URI, initially null;
-                              `iF` any resource indicant of `rA`;
+                              `iR` any resource indicant of `rA`;
                               `p` a file path, that of an interned file
-                        if( `iF` is present )
-                            deem+ `u` the URI reference of `iF`
+                        if( `iR` is present and without an `uninterned` qualifier )
+                            deem+ `u` the URI reference of `iR`
                             if( `u` is a URI )
                                 : re `URI ` see https://tools.ietf.org/html/rfc3986#section-3
                                 + Set `p` to `interned path( u )`.
                                 if( `p` is not null )
                                     + Set `uP` to `u`.
                                     + Rebase `u` to `p`.
-                                    + Rewrite the URI reference of `iF`, changing it to `u`.
+                                    + Rewrite the URI reference of `iR`, changing it to `u`.
                         try
                             compile(+ `rA` )
                                 : join `^^compile( associative reference )$` @
                                   http://reluk.ca/project/Breccia/language_definition.brec
                         catch( `x`: broken reference, pattern not found )
                             if( `uP` is not null )
-                                + Rewrite the URI reference of `iF`, changing it back to `uP`.
+                                + Rewrite the URI reference of `iR`, changing it back to `uP`.
                                 compile(+ `rA` )
                                 warn+ Loose reference: its referent unfound in the patched waysource
                                   of `p`, it is left uninterned, referring outside the way model
