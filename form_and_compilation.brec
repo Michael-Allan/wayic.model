@@ -87,6 +87,7 @@ Form and compilation of way models
           model has at most one, locally interned instance of the file to which all such references
           (where not precluded by model divergence) are themselves interned by transformation.
             : re `locally interned instance` see `^^interned path\( URI`
+            : re `precluded by model divergence` see `^^warn.+Loose reference:.+\R.+left uninterned`
         - A public way model includes its internments, to which other waysource may refer.
             / The following, for example, refers to a publicly interned file.
               http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec
