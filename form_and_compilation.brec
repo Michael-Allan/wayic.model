@@ -81,12 +81,10 @@ Form and compilation of way models
               are those of its canonical location as expressed in URI form.
                 : re `URI form` see https://tools.ietf.org/html/rfc3986#section-3
         - Regardless of the various forms of reference to an extracast file, whether to its original
-          or its various remote internments (any number of which may be combined in the waysource),
-          the way model has at most one, interned instance of the file to which all extracast forms
-          of reference (in as far as conflict resolution allows) are transformed (interned).
-            : re `interned instance` see `^^interned path\( URI`
-            / The only difference among the reference forms is that the interned ones each entail (in as
-              far as conflict resolution allows) the patches of the interning way model.
+          or a remote internment of it (any number of which may be combined in the waysource), the way
+          model has at most one, locally interned instance of the file to which all such references
+          (where not precluded by model divergence) are themselves interned by transformation.
+            : re `locally interned instance` see `^^interned path\( URI`
         - A public way model includes its internments, to which other waysource may refer.
             / The following, for example, refers to a publicly interned file.
               http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec
