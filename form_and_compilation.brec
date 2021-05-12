@@ -82,6 +82,11 @@ Form and compilation of way models
                 : re `URI form` see https://tools.ietf.org/html/rfc3986#section-3
             / Omitted is the scheme component of the canonical location, which compilers and other
               processors may recover ad hoc through a process of trial and error discovery.
+        - Internment serves several purposes, which include the following.
+            • Collation within the way model of its referential parts.
+            • Patching of referent files.
+            • Ease of reference formation.
+                : see `^^- A public way model .+ to which other waysource may refer\.$`
         - Regardless of the various forms of reference to an extracast file, whether to its original
           or a remote internment of it (any number of which may be combined in the waysource), the way
           model has at most one, locally interned instance of the file to which all such references
