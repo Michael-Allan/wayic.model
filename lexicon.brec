@@ -2,6 +2,14 @@ Definition of terms for project Way Modelling
 
     : see also http://reluk.ca/project/wayic/refractory/index.brec
 
+    intern
+        ─ verb, with object
+            - To copy and store (an extracast file) into a way model.
+                : see `extracast files of a way model are copied and stored within the model` @
+                  form_and_compilation.brec
+    interning reference
+        ─ adjective
+            - An reference that makes its referent internable.
     local
         ─ adjective
             - (of a waycast or waysource) Containing or surjoining the thoroughfractum
@@ -12,8 +20,8 @@ Definition of terms for project Way Modelling
     on-way
         ─ adjective and adverb
             - Being part of an aimed way of life.
-            - Being or descending from a thoroughfractum in the way model and thereby representing
-              part of the way.
+            - Being a thoroughfractum or thoroughfractal descendant within a way model
+              and thereby representing part of the way.
     thoroughfracta
         ─ plural noun
             : see `^^thoroughfractum$`

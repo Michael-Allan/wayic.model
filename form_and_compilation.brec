@@ -60,6 +60,7 @@ Form and compilation of way models
                                   of `p`, it is left uninterned, referring outside the way model
                                     / This may occur, for instance, when conflict resolution has
                                       pre-emptively disabled one or more extracast patches.
+                                    / Such a referent, lying outside the way model, is always off-way.
 
         order by path( list of file paths `pp` )
             + Sort `pp` into lexicographic order based on Unicode code points.
@@ -70,7 +71,7 @@ Form and compilation of way models
     ━━━━━━━━━━━━
      Internment
     ────────────
-        - All extracast files of a way model are copied, collated and stored (interned) within the model
+        - All extracast files of a way model are copied and stored within the model (interned)
           at a path formed as follows.
 
               ╶──╴‘:/’╶── authority ── path ───▶
@@ -84,6 +85,7 @@ Form and compilation of way models
               processors may recover ad hoc through a process of trial and error discovery.
         - Internment serves several purposes, which include the following.
             • Collation within the way model of its referential parts.
+                : cf. `a referent.* outside the way model, is always off-way$` @ `^^ Compilation$`
             • Patching of referent files.
             • Ease of reference formation.
                 : see `^^- A public way model .+ to which other waysource may refer\.$`
