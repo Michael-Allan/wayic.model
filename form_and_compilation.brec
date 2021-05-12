@@ -25,7 +25,7 @@ Form and compilation of way models
                 if( `w` contains at its base a file or directory named `:` )
                     throw+ Disallowed file name
                 + Add to `m` all files of `w`.
-            1+ Intern
+            1+ Subsume
             2+ Patch
             3+ Compile
                 deem+ `pp` a list of file paths, those of the files of `m`
@@ -38,12 +38,12 @@ Form and compilation of way models
                           before its transformation in later compilations.
                         deem+ `uP` a URI, initially null;
                               `iR` any resource indicant of `rA`;
-                              `p` a file path, that of an interned file
-                        if( `iR` is present and without an `uninterned` qualifier )
+                              `p` a file path, that of an subsumed file
+                        if( `iR` is present and without an `unsubsumed` qualifier )
                             deem+ `u` the URI reference of `iR`
                             if( `u` is a URI )
                                 : re `URI ` see https://tools.ietf.org/html/rfc3986#section-3
-                                + Set `p` to `interned path( u )`.
+                                + Set `p` to `subsumed path( u )`.
                                 if( `p` is not null )
                                     + Set `uP` to `u`.
                                     + Rebase `u` to `p`.
@@ -57,7 +57,7 @@ Form and compilation of way models
                                 + Rewrite the URI reference of `iR`, changing it back to `uP`.
                                 compile(+ `rA` )
                                 warn+ Loose reference: its referent unfound in the patched waysource
-                                  of `p`, it is left uninterned, referring outside the way model
+                                  of `p`, it is left unsubsumed, referring outside the way model
                                     / This may occur, for instance, when conflict resolution has
                                       pre-emptively disabled one or more extracast patches.
                                     / Such a referent, lying outside the way model, is always off-way.
@@ -69,61 +69,61 @@ Form and compilation of way models
 
 
     ━━━━━━━━━━━━
-     Internment
+     Subsumption
     ────────────
-        - All extracast files of a way model are copied and stored within the model (interned)
+        - All extracast files of a way model are copied and stored within the model (subsumed)
           at a path formed as follows.
 
               ╶──╴‘:/’╶── authority ── path ───▶
 
                 : re `authority` see https://tools.ietf.org/html/rfc3986#section-3.2
                 : re `path` see https://tools.ietf.org/html/rfc3986#section-3.3
-            - The authority and path components of the interned file
+            - The authority and path components of the subsumed file
               are those of its canonical location as expressed in URI form.
                 : re `URI form` see https://tools.ietf.org/html/rfc3986#section-3
             / Omitted is the scheme component of the canonical location, which compilers and other
               processors may recover ad hoc through a process of trial and error discovery.
-        - Internment serves several purposes, which include the following.
+        - Subsumption serves several purposes, which include the following.
             • Collation within the way model of its referential parts.
                 : cf. `a referent.* outside the way model, is always off-way$` @ `^^ Compilation$`
             • Patching of referent files.
             • Ease of reference formation.
                 : see `^^- A public way model .+ to which other waysource may refer\.$`
         - Regardless of the various forms of reference to an extracast file, whether to its original
-          or a remote internment of it (any number of which may be combined in the waysource), the way
-          model has at most one, locally interned instance of the file to which all such references
-          (where not precluded by model divergence) are themselves interned by transformation.
-            : re `locally interned instance` see `^^interned path\( URI`
-            : re `precluded by model divergence` see `^^warn.+Loose reference:.+\R.+left uninterned`
-        - A public way model includes its internments, to which other waysource may refer.
-            / The following, for example, refers to a publicly interned file.
+          or a remote subsumption of it (any number of which may be combined in the waysource), the way
+          model has at most one, locally subsumed instance of the file to which all such references
+          (where not precluded by model divergence) are themselves subsumed by transformation.
+            : re `locally subsumed instance` see `^^subsumed path\( URI`
+            : re `precluded by model divergence` see `^^warn.+Loose reference:.+\R.+left unsubsumed`
+        - A public way model includes its subsumptions, to which other waysource may refer.
+            / The following, for example, refers to a publicly subsumed file.
               http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec
-            - The referent, in that case, would be the file as seen in the interning way model (M).
+            - The referent, in that case, would be the file as seen in the subsuming way model (M).
                 / E.g. `https://cleo.abacus.au/walt/waycast/foo.brec`
                   as seen in `http://reluk.ca/project/waycast/`.
-            - Compiling a jointer to such a referent would intern the file from its original waycast,
+            - Compiling a jointer to such a referent would subsume the file from its original waycast,
               while applying (where conflict resolution allows) the patches of M.
 
-        interned path( URI `u` )
-            / The path to the interned instance of the referent of `u`, or null if none is interred.
-                : re `interned instance` see @ `^^- Regardless of the various forms of reference`
+        subsumed path( URI `u` )
+            / The path to the subsumed instance of the referent of `u`, or null if none is subsumed.
+                : re `subsumed instance` see @ `^^- Regardless of the various forms of reference`
             deem+ `v` a URI, that of `standardize( u )`
-                  `p` the internment path derived from `u`
-                : re `internment path` see `are .+interned.+ at a path formed as follows`
+                  `p` the subsumption path derived from `u`
+                : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
             if( `p` is  absent from the way model )
                 + Set `p` to null.
             return+ `p`
-        intern referent( URI `u` )
-            / Interns the referent of the given URI, unless already it was interned.
+        subsume referent( URI `u` )
+            / Subsumes the referent of the given URI, unless already it was subsumed.
             + Set `u` to `standardize( u )`.
-            deem+ `p` the internment path derived from `u`
-                : re `internment path` see `are .+interned.+ at a path formed as follows`
+            deem+ `p` the subsumption path derived from `u`
+                : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
             if( `p` is  absent from the way model )
                 + Copy the referent of `u` to `p`.
                 for( each relative reference `r` in the copy )
                     + Replace `r` with an absolute reference, that of `r` resolved against `u`.
         standardize( URI `u` )
-            / Returns the standard form of `u` for internment purposes.
+            / Returns the standard form of `u` for subsumption purposes.
             if( `u` lacks an authority component )
                 throw+ Malformed reference
             if( `u` refers to a waycast file )
@@ -132,7 +132,7 @@ Form and compilation of way models
                       http://reluk.ca/project/wayic/cast/form_of_a_waycast.brec
                 deem+ `uL` a URI, that of the canonical location of the local waycast
                 if( `u` begins with `uL` )
-                    throw+ Invalid referent for internment: local waycast file
+                    throw+ Invalid referent for subsumption: local waycast file
             else
                 + Set `u` to normal form.
                     : see https://tools.ietf.org/html/rfc3986#section-6
