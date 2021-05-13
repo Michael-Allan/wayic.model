@@ -21,16 +21,14 @@ Form and compilation of way models
         compile( waycast `w` )
             : join `^^simulacral reference$` @ `^^ Note$`
             deem+ `m` a way model
-            0+ Initialize
+            0. Initialize
                 if( `w` contains at its base a file or directory named `:` )
                     throw+ Disallowed file name
                 + Add to `m` all files of `w`.
-            1+ Subsume
-            2+ Patch
-            3+ Compile
-                deem+ `pp` a list of file paths, those of the files of `m`
-                + Set `pp` to `order by path( pp )`.
-                for( each file `f` of `pp` )
+            1. Subsume
+            2. Patch
+            3. Compile
+                for( each file `f` of `order by path`( all files of `m` ))
                     : cf. `^^compile( Breccian file` @
                       http://reluk.ca/project/Breccia/language_definition.brec
                     for( each associative reference `rA` of `f` in linear order )
