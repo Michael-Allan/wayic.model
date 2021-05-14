@@ -21,13 +21,13 @@ Form and compilation of way models
         compile( waycast `w` )
             : join `^^simulacral reference$` @ `^^ Note$`
             deem+ `m` a way model
-            0. Initialize
+            0. Initialization
                 if( `w` contains at its base a file or directory named `:` )
                     throw+ Disallowed file name
                 + Add to `m` all files of `w`.
-            1. Subsume
-            2. Patch
-            3. Compile
+            1. Subsumption
+            2. Patching
+            3. Compilation
                 for( each file `f` of `order by path`( all files of `m` ))
                     : cf. `^^compile( Breccian file` @
                       http://reluk.ca/project/Breccia/language_definition.brec
@@ -47,15 +47,15 @@ Form and compilation of way models
                                     + Rebase `u` to `p`.
                                     + Rewrite the URI reference of `iR`, changing it to `u`.
                         try
-                            compile(+ `rA` )
+                            + `compile( rA )`
                                 : join `^^compile( associative reference )$` @
                                   http://reluk.ca/project/Breccia/language_definition.brec
                         catch( `x`: broken reference, pattern not found )
                             if( `uP` is not null )
                                 + Rewrite the URI reference of `iR`, changing it back to `uP`.
-                                compile(+ `rA` )
-                                warn+ Loose reference: its referent unfound in the patched waysource
-                                  of `p`, it is left unsubsumed, referring outside the way model
+                                + `compile( rA )`
+                                + Warn ‘Loose reference: its referent unfound in the patched waysource
+                                  of `p`, it is left unsubsumed, referring outside the way model.’
                                     / This may occur, for instance, when conflict resolution has
                                       pre-emptively disabled one or more extracast patches.
                                     / Such a referent, lying outside the way model, is always off-way.
