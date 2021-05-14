@@ -128,9 +128,6 @@ Form and compilation of way models
                 + Set `u` to `canonicalize( u )`.
                     : re `canonicalize` see `canonicalize\( URI` @ `^^ Canonical location$` @
                       http://reluk.ca/project/wayic/cast/form_of_a_waycast.brec
-                deem+ `uL` a URI, that of the canonical location of the local waycast
-                if( `u` begins with `uL` )
-                    throw+ Invalid referent for subsumption: local waycast file
             else
                 + Set `u` to normal form.
                     : see https://tools.ietf.org/html/rfc3986#section-6
