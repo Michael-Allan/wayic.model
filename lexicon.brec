@@ -2,10 +2,10 @@ Definition of terms for project Way Modelling
 
     : see also http://reluk.ca/project/wayic/refractory/index.brec
 
-    local
+    local, of a waycast, waysource or cast file
         ─ adjective
-            - (of a waycast or waysource) Containing or surjoining the thoroughfractum
-              that determines a given way model.
+            - (of a waycast) Containing the thoroughfractum that determines a given way model.
+            - (of waysource or a cast file) Part of the local waycast.
     off-way
         ─ adjective and adverb
             - Not on-way.
@@ -14,6 +14,9 @@ Definition of terms for project Way Modelling
             - Being part of an aimed way of life.
             - Being a thoroughfractum or thoroughfractal descendant within a way model
               and thereby representing part of the way.
+    remote, of a waycast, waysource or cast file
+        ─ adjective
+            - Not local.
     subsume
         ─ verb, with object
             - To copy and store (an extracast file) into a way model.
