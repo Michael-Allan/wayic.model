@@ -6,6 +6,12 @@ Definition of terms for project Way Modelling
         ─ adjective
             - (of a waycast) Containing the thoroughfractum that determines a given way model.
             - (of waysource or a cast file) Part of the local waycast.
+    intern
+        ─ verb, with object
+            - To transform an extramodel reference to refer instead to the intramodel instance
+              of its original referent.
+                : see `intramodel instance.+to which.+references.*\R.+transformed \(interned\)` @
+                  form_and_compilation.brec
     off-way
         ─ adjective and adverb
             - Not on-way.
@@ -21,9 +27,6 @@ Definition of terms for project Way Modelling
         ─ verb, with object
             - To copy and store (an extracast file) into a way model.
                 : see `extracast files .+ copied and stored within the model` @ form_and_compilation.brec
-            - To transform a reference to refer instead to the subsumed instance
-              of its original referent.
-                : see `references.*\R.+themselves subsumed by transformation` @ form_and_compilation.brec
     thoroughfracta
         ─ plural noun
             : see `^^thoroughfractum$`

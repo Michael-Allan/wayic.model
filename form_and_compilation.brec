@@ -20,16 +20,16 @@ Form and compilation of way models
 
         compile( waycast `w` )
             : join `^^simulacral reference$` @ `^^ Note$`
-            0. Initialization
+            0. Copying of intracast files
                 if( `w` contains at its base a file or directory named `:` )
                     throw+ Disallowed file name
                 + Add to the model all files of `w`.
-            1. Subsumption
-                a) Files explicitly subsumed \ Before (b), wherefore no subsumer `s` is remote.
+            1. Subsumption of extracast files
+                a) Explicitly via subsumers \ Before (b), while the model contains local subsumers only.
                     for( each subsumer `s` of the model  )
                         + `subsume referent( URI of s )`
                             : see `^^subsume referent\(` @ `^^ Subsumption$`
-                b) Files lying on-way
+                b) Implicitly via way trace
                     deem+ `t` a thoroughfractum, that of the model
                     if( `t` is a jointer `j` )
                         + `subsume through( j )`
@@ -37,18 +37,18 @@ Form and compilation of way models
                     else
                         + `subsume subjoints( t )`
                             : see `^^subsume subjoints\(` @ `^^ Subsumption$`
-                c) References
-                    / Those not subsumed en passent in (b).
-                    for( each associative reference `rA` of the model  )
-                        if( `rA` has a resource indicant `iR`,
-                          & `iR` has neither a `non-fractal` nor an `unsubsumed` qualifier,
-                          & the URI reference of `iR` is a proper URI `u` )
-                            : re `proper URI` see https://tools.ietf.org/html/rfc3986#section-3
-                            deem+ `p` a file path, that of `subsumed path( u )`
-                            if( `p` is not null )
-                                + `subsume reference( rA, u, p )`
-            2. Patching
-            3. Compilation
+            2. Internment of references
+                : see also `(intern reference)` @ `^^subsume through`
+                for( each associative reference `rA` of the model  )
+                    if( `rA` has a resource indicant `iR`,
+                      & `iR` is without an `uninterned` qualifier,
+                      & the URI reference of `iR` is a proper URI `u` )
+                        : re `proper URI` see https://tools.ietf.org/html/rfc3986#section-3
+                        deem+ `p` a file path, that of `intramodel path( u )`
+                        if( a file is present at `p` )
+                            + `intern reference( rA, u, p )`
+            3. Patching
+            4. Compilation
 
         order by path( list of file paths `pp` )
             + Sort `pp` into lexicographic order based on Unicode code points.
@@ -89,11 +89,11 @@ Form and compilation of way models
             • Ease of surjoining remote way models, or otherwise referring into them.
                 : see `^^- A public way model .+ to which other waysource may refer\.$`
         - Regardless of the various forms of reference to an extracast file, whether to its original
-          or a remote subsumption of it (any number of which may be combined in the waysource), the way
-          model has at most one, locally subsumed instance of the file to which all such references
-          (where not precluded by model divergence) are themselves subsumed by transformation.
-            : re `locally subsumed instance` see `^^subsumed path\( URI`
-            : re `precluded by model divergence` see `^^warn.+Loose reference:.+\R.+left unsubsumed`
+          or a remote subsumption of it (any number of which may be combined in the waysource),
+          the way model has at most one, intramodel instance of the file to which all such references
+          (where not precluded by model divergence) are transformed (interned).
+            : re `intramodel instance` see `^^intramodel path\( URI`
+            : re `precluded by model divergence` see `^^loose references$` @ `^^ Data store$`
         - A public way model includes its subsumptions, to which other waysource may refer.
             / The following, for example, refers to a publicly subsumed file.
               http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec
@@ -102,6 +102,49 @@ Form and compilation of way models
                   as seen in `http://reluk.ca/project/waycast/`.
             - Compiling a jointer to such a referent would subsume the file from its original waycast,
               while applying (where conflict resolution allows) the patches of M.
+
+        intern reference( internable associative reference `rA` of the model,
+              URI `u` equal to the URI reference of the resource indicator of `rA`,
+              path `p` of the intramodel instance of the referent of `u` )
+                : re `(URI) \`u\`` see https://tools.ietf.org/html/rfc3986#section-3
+            / Transforms `rA` to refer instead to `p`, then writes `rA` back into the model.
+              Returns `(rA, wasInterned)`, the resulting associative reference `rA` plus boolean flag
+              `wasInterned`.  The flag will be false if internment failed, in which case `rA` will have
+              been added to the data store’s loose references and will retain its original form.
+            deem+ `wasInterned` a boolean flag, initially false
+            if( `p` is no subsumption path )
+                : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
+                + Transform `rA` by setting its resource indicator’s URI reference (presently `u`)
+                  to the relative path from the file of `rA` to that of `p`. \ The same as below.
+                + Write the transformed `rA` into the model, replacing its original instance.
+                + Set `wasInterned` to true.
+            else if( `rA` is absent from the loose references of the data store )
+                + Transform `rA` by setting its resource indicator’s URI reference (presently `u`)
+                  to the relative path from the file of `rA` to that of `p`. \ The same as above.
+                try
+                    + `referent( rA )`
+                        : see `^^referent\( associative reference \)` @
+                          http://reluk.ca/project/Breccia/language_definition.brec
+                    + Write the transformed `rA` into the model, replacing its original instance.
+                    + Set `wasInterned` to true.
+                catch( broken reference, pattern not found )
+                    + Revert `rA` to its original form by setting its resource indicator’s
+                      URI reference back to `u`.
+                    + Add `rA` to the loose references of the data store.
+                    + Warn of `(rA, u)`, ‘Loose reference `rA`: its referent could not be found
+                      in the subsumed instance of its referent file `u`, and therefore `rA`
+                      is left uninterned, referring outside the way model.’
+            return+ `(rA, wasInterned)`
+
+        intramodel path( URI `u` )
+            : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
+            / The path proper to any intramodel instance of the referent of `u`.
+                : re `intramodel instance` see @ `^^- Regardless of the various forms of reference`
+            + Set `u` to `standardize( u )`.
+            if( `u` begins with the canonical location `λ` of the local waycast )
+                return+ `u` relativized against `λ`
+            return+ the subsumption path derived from `u`
+                : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
 
         standardize( URI `u` )
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
@@ -117,52 +160,13 @@ Form and compilation of way models
                     : see https://tools.ietf.org/html/rfc3986#section-6
             return+ `u`
 
-        subsumed path( URI `u` )
-            : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
-            / The path to the subsumed instance of the referent of `u`, or null if none is subsumed.
-                : re `subsumed instance` see @ `^^- Regardless of the various forms of reference`
-            deem+ `v` a URI, that of `standardize( u )`
-                  `p` the subsumption path derived from `u`
-                : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
-            if( `p` is  absent from the way model )
-                + Set `p` to null.
-            return+ `p`
-
-        subsume reference( subsumable associative reference `rA` of the model,
-              URI `u` equal to the URI reference of the resource indicator of `rA`,
-              path `p` of the subsumed instance of the file at `u` )
-                : re `(URI) \`u\`` see https://tools.ietf.org/html/rfc3986#section-3
-            / Transforms `rA` to refer instead to the subsumed instance of its original referent,
-              then writes the transformed result back into the model.
-            / Returns `(rA, wasSubsumed)`, the resulting associative reference `rA` plus boolean flag
-              `wasSubsumed`.  The flag will be false if subsumption failed, in which case `rA` will have
-              been added to the data store’s loose references and will retain its original form.
-            deem+ `wasSubsumed` a boolean flag, initially false
-            if( `rA` is absent from the loose references of the data store )
-                + Transform `rA` by setting its resource indicator’s URI reference (presently `u`)
-                  to the relative path from the file of `rA` to that of `p`.
-                try
-                    + `referent( rA )`
-                        : see `^^referent\( associative reference \)` @
-                          http://reluk.ca/project/Breccia/language_definition.brec
-                    + Write `rA` back into the model, replacing its original instance.
-                    + Set `wasSubsumed` to true.
-                catch( broken reference, pattern not found )
-                    + Revert `rA` to its original form by setting its resource indicator’s
-                      URI reference back to `u`.
-                    + Add `rA` to the loose references of the data store.
-                    + Warn of `(rA, u)`, ‘Loose reference `rA`: its referent could not be found
-                      in the subsumed instance of its referent file `u`, and therefore `rA`
-                      is left unsubsumed, referring outside the way model.’
-            return+ `(rA, wasSubsumed)`
-
         subsume referent( URI `u` )
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
-            / Subsumes the referent of `u` unless already it was subsumed.
-            + Set `u` to `standardize( u )`.
-            deem+ `p` the subsumption path derived from `u`
+            / Subsumes the referent of `u` unless it is either local to the waycast or already subsumed.
+              Returns the value of `intramodel path( u )`.
+            deem+ `p` a file path, that of `intramodel path( u )`
+            if( `p` is a subsumption path  &  no file is present at `p` )
                 : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
-            if( `p` is  absent from the way model )
                 + Copy the referent of `u` to `p`.
                 for( each relative URI reference `r` in the copy )
                     + Replace `r` with an absolute reference, that of `r` resolved against `u`.
@@ -177,15 +181,15 @@ Form and compilation of way models
         subsume through( jointer `j` of the model )
             / Ensures that the subsumable files of all fracta subjoint through `j` are subsumed.
             if( `j` has a resource indicant `iR` )
-                if( `iR` has either a `non-fractal` or an `unsubsumed` qualifier )
+                if( `iR` has either a `non-fractal` or an `uninterned` qualifier )
                     return+
                 if( the URI reference of `iR` is a proper URI `u` )
                     : re `proper URI` see https://tools.ietf.org/html/rfc3986#section-3
-                    deem+ `wasSubsumed` a boolean flag;
-                          `p` the path of a subsumed file
+                    deem+ `p` a file path;
+                          `wasInterned` a boolean flag
                     + Set `p` to `subsume referent( u )`.
-                    + Set `(j, wasSubsumed)` to `subsume reference( j, u, p )`.
-                    unless( wasSubsumed )
+                    + Set `(j, wasInterned)` to `intern reference( j, u, p )`.
+                    unless( wasInterned )
                         return+
             deem+ `f` a fractum;
                   `t` a referent
