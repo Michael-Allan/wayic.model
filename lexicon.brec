@@ -12,6 +12,9 @@ Definition of terms for project Way Modelling
               of its original referent.
                 : see `intramodel instance.+to which.+references.*\R.+transformed \(interned\)` @
                   form_and_compilation.brec
+    lexicographic path order
+        ─ mass noun
+            - A lexicographic arrangement of file paths based on their Unicode code points.
     off-way
         ─ adjective and adverb
             - Not on-way.
@@ -39,13 +42,14 @@ Definition of terms for project Way Modelling
               its head representing the goal and its body the means.
     way model
         ─ noun
+            - The compiled, executable form of a waycast,
+              as opposed to the initial, written form of its source code.
+                : re `compiled.+` see same head @ form_and_compilation.brec
             - A representation of an aimed way of life.
                 : see @ form_and_compilation.brec
-            - A Waybreccian simulacrum.
-                : see  @ form_and_compilation.brec
-        ─ verb
+        ─ verb, mainly as the gerund ‘way modelling’
+            - Compile the executable form of a waycast.
             - Represent an aimed way of life.
-                / Mainly as the gerund ‘way modelling’.
 
 
                                                     \ Copyright © 2020-2021  Michael Allan.  Licence MIT.

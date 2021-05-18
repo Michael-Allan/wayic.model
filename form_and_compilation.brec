@@ -1,6 +1,6 @@
 Form and compilation of way models
 
-    - A way model is a waycast in compiled, executable form,
+    - A way model is the compiled, executable form of a waycast,
       as opposed to the initial, written form of its source code.
         : cf. `^^ Simulacrum$` @ http://reluk.ca/project/Breccia/language_definition.brec
         - A representation of an aimed way of life.
@@ -19,26 +19,32 @@ Form and compilation of way models
         - Compilation of a way model from a waycast.
 
         compile( waycast `w` )
-            : join `^^simulacral reference$` @ `^^ Note$`
-            0. Copying of intracast files
+            1. Copying of intracast files
                 if( `w` contains at its base a file or directory named `:` )
                     throw+ Disallowed file name
                 + Add to the model all files of `w`.
-            1. Subsumption of extracast files
+            2. Registration of waycasts
+                deem+ `λ` the canonical location of the local waycast;
+                      `λλ` a set of waycast locations, initially empty;
+                      `rr` a list of waycast registers, initially empty
+                + `register( λ, λλ, rr )`
+                - Now `rr` contains one waycast register `r`, that of the local waycast.
+                + Set the `local waycast register` of the data store to `r`.
+            3. Subsumption and patching of extracast files
                 a) Explicitly via subsumers \ Before (b), while the model contains local subsumers only.
                     for( each subsumer `s` of the model  )
-                        + `subsume referent( URI of s )`
-                            : see `^^subsume referent\(` @ `^^ Subsumption$`
+                        + `subsume and patch referent( URI of s )`
+                            : see `^^subsume and patch referent\(` @ `^^ Subsumption$`
                 b) Implicitly via way trace
                     deem+ `t` a thoroughfractum, that of the model
                     if( `t` is a jointer `j` )
-                        + `subsume through( j )`
-                            : see `^^subsume through\(` @ `^^ Subsumption$`
+                        + `subsume and patch through( j )`
+                            : see `^^subsume and patch through\(` @ `^^ Subsumption$`
                     else
-                        + `subsume subjoints( t )`
-                            : see `^^subsume subjoints\(` @ `^^ Subsumption$`
-            2. Internment of references
-                : see also `(intern reference)` @ `^^subsume through`
+                        + `subsume and patch subjoints( t )`
+                            : see `^^subsume and patch subjoints\(` @ `^^ Subsumption$`
+            4. Internment of references
+                : see also `(intern reference)` @ `^^subsume and patch through`
                 for( each associative reference `rA` of the model  )
                     if( `rA` has a resource indicant `iR`,
                       & `iR` is without an `uninterned` qualifier,
@@ -47,61 +53,7 @@ Form and compilation of way models
                         deem+ `p` a file path, that of `intramodel path( u )`
                         if( a file is present at `p` )
                             + `intern reference( rA, u, p )`
-            3. Patching
-            4. Compilation
-
-        order by path( list of file paths `pp` )
-            + Sort `pp` into lexicographic order based on Unicode code points.
-            return+ `pp`
-
-
-
-    ━━━━━━━━━━━━
-     Data store
-    ────────────
-        loose references
-            - The set of associative references each of which failed to subsume because its referent
-              could not be found in the subsumed instance of the referent file.
-                / This may occur, for instance, when conflict resolution has pre-emptively disabled
-                  one or more patches that would have applied to subsumed instance of the referent file.
-            / The corresponding referents, lying outside the way model, are off-way by definition.
-
-
-
-    ━━━━━━━━━━━━
-     Subsumption
-    ────────────
-        - All extracast files of a way model are copied and stored within the model (subsumed)
-          at a path formed as follows.
-
-              ╶──╴‘:/’╶── authority ── path ───▶
-
-                : re `authority` see https://tools.ietf.org/html/rfc3986#section-3.2
-                : re `path` see https://tools.ietf.org/html/rfc3986#section-3.3
-            - The authority and path components of the subsumed file
-              are those of its canonical location as expressed in URI form.
-                : re `URI form` see https://tools.ietf.org/html/rfc3986#section-3
-            / Omitted is the scheme component of the canonical location, which compilers and other
-              processors may recover ad hoc through a process of trial and error discovery.
-        - Subsumption serves several purposes, which include the following.
-            • Collation of the way model from scattered waysource.
-            • Patching of waysource that would otherwise be out of reach.
-            • Ease of surjoining remote way models, or otherwise referring into them.
-                : see `^^- A public way model .+ to which other waysource may refer\.$`
-        - Regardless of the various forms of reference to an extracast file, whether to its original
-          or a remote subsumption of it (any number of which may be combined in the waysource),
-          the way model has at most one, intramodel instance of the file to which all such references
-          (where not precluded by model divergence) are transformed (interned).
-            : re `intramodel instance` see `^^intramodel path\( URI`
-            : re `precluded by model divergence` see `^^loose references$` @ `^^ Data store$`
-        - A public way model includes its subsumptions, to which other waysource may refer.
-            / The following, for example, refers to a publicly subsumed file.
-              http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec
-            - The referent, in that case, would be the file as seen in the subsuming way model (M).
-                / E.g. `https://cleo.abacus.au/walt/waycast/foo.brec`
-                  as seen in `http://reluk.ca/project/waycast/`.
-            - Compiling a jointer to such a referent would subsume the file from its original waycast,
-              while applying (where conflict resolution allows) the patches of M.
+            5. Compilation
 
         intern reference( internable associative reference `rA` of the model,
               URI `u` equal to the URI reference of the resource indicator of `rA`,
@@ -146,6 +98,19 @@ Form and compilation of way models
             return+ the subsumption path derived from `u`
                 : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
 
+        register( waycast canonical location `λ`, set of registered waycasts `λλ`,
+              list of waycast registers `rr` )
+            / Registers the waycast at `λ`, unless already it was registered,
+              by making a register for it and appending the register to `rr`.
+            unless( `λλ` contains `λ` )
+                + Append to `rr` a new waycast register `r`.
+                + Set the `location` of `r` to `λ`.
+                + Add `λ` to `λλ`.
+                deem+ `ss` a list of waycast registers, that of the `subcast registers` of `r`
+                for( each subcast `s` of the waycast at `λ` in priority order )
+                    + Set `λ` to the canonical location `s`.
+                    + `register( λ, λλ, ss )`
+
         standardize( URI `u` )
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
             / Returns the standard form of `u` for subsumption purposes.
@@ -160,26 +125,122 @@ Form and compilation of way models
                     : see https://tools.ietf.org/html/rfc3986#section-6
             return+ `u`
 
-        subsume referent( URI `u` )
+
+
+    ━━━━━━━━━━━━
+     Data store
+    ────────────
+        local waycast register
+            - The waycast register of the local waycast.
+            / Initial value, null.
+        loose references
+            - The set of associative references each of which failed to subsume because its referent
+              could not be found in the subsumed instance of the referent file.
+                / This may occur, for instance, when conflict resolution has pre-emptively disabled
+                  one or more patches that would have applied to subsumed instance of the referent file.
+                / Initial value, empty.
+            / The corresponding referents, lying outside the way model, are off-way by definition.
+
+
+
+    ━━━━━━━━━━━━━━━━
+     Data structure
+    ────────────────
+        waycast register
+            - The register of a waycast `w`.
+            location, URI
+                - The canonical location of `w`.
+                : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
+                / Initial value, null.
+                - All locations within the register, including that of `w` and each of its subcasts,
+                  whether direct or indirect, are unique.
+            subcast registers, list of waycast registers
+                - The registers of the subcasts of `w` in priority order, highest first.
+                / Initial value, empty.
+
+
+
+    ━━━━━━━━━━
+     Patching
+    ──────────
+        apply patches( subsumed file path `f`, waycast canonical location `λ` )
+            deem+ `pp` a list of patches;
+                  `w` the waycast at `λ`
+            for( each Breccian file `g` of `w` in lexicographic path order )
+                for( each patch `p` of `g` in linear order )
+                    if( `p` targets `f` )
+                        + Append `p` to `pp`.
+            define the remainder+
+                : cf. `^^apply\(` @ `^^ Patch$` @ ~/work/wayic/Waybrec/language_definition.brec
+
+        apply patches( subsumed file path `f`, waycast register `r` )
+            deem+ `ss` a list of waycast registers, that of the `subcast registers` of `r`
+            for( each subcast register `s` of `ss` )
+                + `apply patches( f, s.location )`
+            + `apply patches( f, r.location )`
+
+
+
+    ━━━━━━━━━━━━━
+     Subsumption
+    ─────────────
+        - All extracast files of a way model are copied and stored within the model (subsumed)
+          at a path formed as follows.
+
+              ╶──╴‘:/’╶── authority ── path ───▶
+
+                : re `authority` see https://tools.ietf.org/html/rfc3986#section-3.2
+                : re `path` see https://tools.ietf.org/html/rfc3986#section-3.3
+            - The authority and path components of the subsumed file
+              are those of its canonical location as expressed in URI form.
+                : re `URI form` see https://tools.ietf.org/html/rfc3986#section-3
+            / Omitted is the scheme component of the canonical location, which compilers and other
+              processors may recover ad hoc through a process of trial and error discovery.
+        - Subsumption serves several purposes, which include the following.
+            • Collation of the way model from scattered waysource.
+            • Patching of waysource that would otherwise be out of reach.
+            • Ease of surjoining remote way models, or otherwise referring into them.
+                : see `^^- A public way model .+ to which other waysource may refer\.$`
+        - Regardless of the various forms of reference to an extracast file, whether to its original
+          or a remote subsumption of it (any number of which may be combined in the waysource),
+          the way model has at most one, intramodel instance of the file to which all such references
+          (where not precluded by model divergence) are transformed (interned).
+            : re `intramodel instance` see `^^intramodel path\(` @ `^^ Compilation$`
+            : re `precluded by model divergence` see `^^loose references$` @ `^^ Data store$`
+        - A public way model includes its subsumptions, to which other waysource may refer.
+            / The following, for example, refers to a publicly subsumed file.
+              http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec
+            - The referent, in that case, would be the file as seen in the subsuming way model (M).
+                / E.g. `https://cleo.abacus.au/walt/waycast/foo.brec`
+                  as seen in `http://reluk.ca/project/waycast/`.
+            - Compiling a jointer to such a referent would subsume the file from its original waycast,
+              while applying (where conflict resolution allows) the patches of M.
+
+        subsume and patch referent( URI `u` )
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
-            / Subsumes the referent of `u` unless it is either local to the waycast or already subsumed.
-              Returns the value of `intramodel path( u )`.
-            deem+ `p` a file path, that of `intramodel path( u )`
-            if( `p` is a subsumption path  &  no file is present at `p` )
+            / Subsumes and patches the referent of `u` unless it is proper to the waycast
+              or was already subsumed.  Returns the value of `intramodel path( u )`.
+                : re `intramodel path` see `^^intramodel path\(` @ `^^ Compilation$`
+            deem+ `f` a file path, that of `intramodel path( u )`
+                : see `^^intramodel path\(` @ `^^ Compilation$`
+            if( `f` is a subsumption path  &  no file is present at `f` )
                 : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
-                + Copy the referent of `u` to `p`.
+                + Copy the referent of `u` to `f`.
                 for( each relative URI reference `r` in the copy )
                     + Replace `r` with an absolute reference, that of `r` resolved against `u`.
-            return+ `p`
+                + `apply patches( f, local waycast register )`
+                    : see `^^patch\(` @ `^^ Patching$`
+            return+ `f`
 
-        subsume subjoints( fractum `f` of the model )
-            / Ensures that the subsumable files of all fracta subjoint of `f` are subsumed.
+        subsume and patch subjoints( fractum `f` of the model )
+            / Ensures that the subsumable files of all fracta subjoint of `f` are subsumed and patched.
             for( each jointer `j` descendent of `f` )
-                + `subsume through( j )`
+                + `subsume and patch through( j )`
                     / Here compilers should detect and avoid any infinite loop.
 
-        subsume through( jointer `j` of the model )
-            / Ensures that the subsumable files of all fracta subjoint through `j` are subsumed.
+        subsume and patch through( jointer `j` of the model )
+            / Ensures that the files of all fracta subjoint and subsumable by way of `j`
+              are indeed subsumed and patched.
             if( `j` has a resource indicant `iR` )
                 if( `iR` has either a `non-fractal` or an `uninterned` qualifier )
                     return+
@@ -187,8 +248,9 @@ Form and compilation of way models
                     : re `proper URI` see https://tools.ietf.org/html/rfc3986#section-3
                     deem+ `p` a file path;
                           `wasInterned` a boolean flag
-                    + Set `p` to `subsume referent( u )`.
+                    + Set `p` to `subsume and patch referent( u )`.
                     + Set `(j, wasInterned)` to `intern reference( j, u, p )`.
+                        : see `^^intern reference\(` @ `^^ Compilation$`
                     unless( wasInterned )
                         return+
             deem+ `f` a fractum;
@@ -202,17 +264,7 @@ Form and compilation of way models
                 / Then `t` can only be a fractum. \ ∵ `non-fractal` is absent
                 + Set `f` to `t`.
             / Fractum `f` lies within the model. \ ∵ any `u` above was subsumed to a relative reference
-            + `subsume subjoints( f )`
-
-
-
-    ━━━━━━
-     Note
-    ──────
-        simulacral reference
-            - Herein the default referent is the simulacrum (aka the way model), not the source code.
-                : cf. `^^default referent` @ `^^ Simulacrum$` @
-                  http://reluk.ca/project/Breccia/language_definition.brec
+            + `subsume and patch subjoints( f )`
 
 
 
