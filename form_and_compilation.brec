@@ -23,13 +23,12 @@ Form and compilation of way models
                 if( `w` contains at its base a file or directory named `:` )
                     throw+ Disallowed file name
                 + Add to the model all files of `w`.
-            2. Registration of waycasts
+            2. Registration of subcasts
                 deem+ `λ` the canonical location of the local waycast;
-                      `λλ` a set of waycast locations, initially empty;
-                      `rr` a list of waycast registers, initially empty
-                + `register( λ, λλ, rr )`
-                - Now `rr` contains one waycast register `r`, that of the local waycast.
-                + Set the `local waycast register` of the data store to `r`.
+                      `λλ` a set of waycast locations, initially empty
+                + Add `λ` to `λλ`.
+                + Set the `local waycast register` of the data store
+                  to `make register( local waycast, λ, λλ )`.
             3. Subsumption and patching of extracast files
                 a) Explicitly via subsumers \ Before (b), while the model contains local subsumers only.
                     for( each subsumer `s` of the model  )
@@ -98,18 +97,16 @@ Form and compilation of way models
             return+ the subsumption path derived from `u`
                 : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
 
-        register( waycast canonical location `λ`, set of registered waycasts `λλ`,
-              list of waycast registers `rr` )
-            / Registers the waycast at `λ`, unless already it was registered,
-              by making a register for it and appending the register to `rr`.
-            unless( `λλ` contains `λ` )
-                + Append to `rr` a new waycast register `r`.
-                + Set the `location` of `r` to `λ`.
-                + Add `λ` to `λλ`.
-                deem+ `ss` a list of waycast registers, that of the `subcast registers` of `r`
-                for( each subcast `s` of the waycast at `λ` in priority order )
-                    + Set `λ` to the canonical location `s`.
-                    + `register( λ, λλ, ss )`
+        make register( waycast `w`, waycast canonical location `λ`, set of registered locations `λλ` )
+            / Makes a complete waycast register for `w`.  Assumes that already `λλ` contains `λ`.
+            deem+ `r` a new waycast register
+            + Set the `location` of `r` to `λ`.
+            for( each subcast `s` of `w` in priority order )
+                + Set `λ` to the canonical location of `s`.
+                unless( `λλ` contains `λ` )
+                    + Add `λ` to `λλ`.
+                    + Append `make register(s,λ,λλ)` to the `subcast registers` of `r`.
+            return+ `r`
 
         standardize( URI `u` )
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
