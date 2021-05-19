@@ -160,21 +160,24 @@ Form and compilation of way models
     ━━━━━━━━━━
      Patching
     ──────────
-        apply patches( subsumed file path `f`, waycast canonical location `λ` )
-            deem+ `pp` a list of patches;
-                  `w` the waycast at `λ`
+        apply patches( subsumed file path `f`, waycast `w` )
+            deem+ `isOwnFile` a boolean flag, telling whether `f` is a subsumed file of `w`
             for( each Breccian file `g` of `w` in lexicographic path order )
                 for( each patch `p` of `g` in linear order )
-                    if( `p` targets `f` )
-                        + Append `p` to `pp`.
-            define the remainder+
-                : cf. `^^apply\(` @ `^^ Patch$` @ ~/work/wayic/Waybrec/language_definition.brec
+                    if( the target of `p` has the same canonical location as the original of `f` )
+                        : see `The.+components of the subsumed file.+are those of its canonical location`
+                          @ `^^ Subsumption$`
+                        if( `isOwnFile` )
+                            throw+ Patch `p` targets its own waycast `w`
+                        + `apply( p, f )`
+                            : see `^^apply\(` @ `^^ Patch$` @
+                              http://reluk.ca/project/wayic/Waybrec/language_definition.brec
 
-        apply patches( subsumed file path `f`, waycast register `r` )
-            deem+ `ss` a list of waycast registers, that of the `subcast registers` of `r`
-            for( each subcast register `s` of `ss` )
-                + `apply patches( f, s.location )`
-            + `apply patches( f, r.location )`
+        apply patches( subsumed file path `f`, waycast `w`, waycast register `wR` )
+            for( each waycast register `sR` of the `subcast registers` of `wR` )
+                deem+ `s` the waycast at `sR.location`
+                + `apply patches( f, s )`
+            + `apply patches( f, w )`
 
 
 
@@ -225,7 +228,7 @@ Form and compilation of way models
                 + Copy the referent of `u` to `f`.
                 for( each relative URI reference `r` in the copy )
                     + Replace `r` with an absolute reference, that of `r` resolved against `u`.
-                + `apply patches( f, local waycast register )`
+                + `apply patches( f, local waycast, local waycast register )`
                     : see `^^patch\(` @ `^^ Patching$`
             return+ `f`
 
