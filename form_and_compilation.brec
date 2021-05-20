@@ -133,8 +133,7 @@ Form and compilation of way models
         loose references
             - The set of associative references each of which failed to subsume because its referent
               could not be found in the subsumed instance of the referent file.
-                / This may occur, for instance, when conflict resolution has pre-emptively disabled
-                  one or more patches that would have applied to subsumed instance of the referent file.
+                / This may occur, for instance, owing to patch suppression.
                 / Initial value, empty.
             / The corresponding referents, lying outside the way model, are off-way by definition.
 
@@ -192,6 +191,17 @@ Form and compilation of way models
                 + `apply patches( f, s )`
             + `apply patches( f, w )`
 
+        ───────────────────
+         patch suppression
+        ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+            - The application of a patch may be suppressed for one of several reasons,
+              which are formalized as follows.
+            `native dormant`
+            `prior-subcast target`
+            `self-owned target`
+            `surcast target`
+
+
 
 
     ━━━━━━━━━━━━━
@@ -227,7 +237,7 @@ Form and compilation of way models
                 / E.g. `https://cleo.abacus.au/walt/waycast/foo.brec`
                   as seen in `http://reluk.ca/project/waycast/`.
             - Compiling a jointer to such a referent would subsume the file from its original waycast,
-              while applying (where conflict resolution allows) the patches of M.
+              and apply (subject to patch suppression) the patches of M.
 
         subsume and patch referent( URI `u` )
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
