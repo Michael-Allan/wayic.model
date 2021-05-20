@@ -173,14 +173,16 @@ Form and compilation of way models
             / In terms of tree structures, this is a depth-first post-order traversal.
 
         apply patches( subsumed file path `f`, waycast `w` )
-            deem+ `isOwnFile` a boolean flag, telling whether `f` is a subsumed file of `w`
+            deem+ `isSelfOwned` a boolean flag, telling whether `f` is native to `w`
             for( each Breccian file `g` of `w` in lexicographic path order )
                 for( each patch `p` of `g` in linear order )
                     if( the target of `p` has the same canonical location as the original of `f` )
                         : see `The.+components of the subsumed file.+are those of its canonical location`
                           @ `^^ Subsumption$`
-                        if( `isOwnFile` )
+                        if( `isSelfOwned` )
                             throw+ Patch `p` targets its own waycast `w`
+                                : see `target must lie.+remote` @ `^^ Patch$` @
+                                  http://reluk.ca/project/wayic/Waybrec/language_definition.brec
                         + `apply( p, f )`
                             : see `^^apply\(` @ `^^ Patch$` @
                               http://reluk.ca/project/wayic/Waybrec/language_definition.brec
@@ -194,12 +196,17 @@ Form and compilation of way models
         ───────────────────
          patch suppression
         ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-            - The application of a patch may be suppressed for one of several reasons,
+            - The application of a patch may be suppressed owing to one of several causes,
               which are formalized as follows.
             `native dormant`
-            `prior-subcast target`
-            `self-owned target`
-            `surcast target`
+            `prior-subcast targeting`
+            `self targeting` (actually an error)
+                - The patch targets its own waycast.
+                - This actually causes a compilation error, not a patch suppression.
+                    / It is included only because of its similarity to the other ‘targeting’ causes.
+                    : re `compilation error` e.g. `^^throw. Patch.+ targets its own waycast` @
+                      `^^apply patches\($`
+            `surcast targeting`
 
 
 
