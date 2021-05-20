@@ -172,42 +172,85 @@ Form and compilation of way models
           (itself now `wR`) in turn.
             / In terms of tree structures, this is a depth-first post-order traversal.
 
-        apply patches( subsumed file path `f`, waycast `w` )
-            deem+ `isSelfOwned` a boolean flag, telling whether `f` is native to `w`
+        apply patches( subsumed path `t` of the target file,  waycast `w`,  cause of suppression `cS` )
+            / Returns true if target `t` is native to `w`.
+            deem+ `isSelfOwned` a boolean flag telling whether `t` is native to `w`
             for( each Breccian file `g` of `w` in lexicographic path order )
                 for( each patch `p` of `g` in linear order )
-                    if( the target of `p` has the same canonical location as the original of `f` )
+                    if( the target of `p` has the same canonical location as the original of `t` )
                         : see `The.+components of the subsumed file.+are those of its canonical location`
                           @ `^^ Subsumption$`
                         if( `isSelfOwned` )
                             throw+ Patch `p` targets its own waycast `w`
                                 : see `target must lie.+remote` @ `^^ Patch$` @
                                   http://reluk.ca/project/wayic/Waybrec/language_definition.brec
-                        + `apply( p, f )`
-                            : see `^^apply\(` @ `^^ Patch$` @
-                              http://reluk.ca/project/wayic/Waybrec/language_definition.brec
+                        if( `cS` is null )
+                            + `apply( p, t )`
+                                : see `^^apply\(` @ `^^ Patch$` @
+                                  http://reluk.ca/project/wayic/Waybrec/language_definition.brec
+                        else
+                            + `record patch suppression( p, w, t, cS )`
+                                : see `^^record patch suppression\(`
+            return+ `isSelfOwned`
 
-        apply patches( subsumed file path `f`, waycast `w`, waycast register `wR` )
-            for( each waycast register `sR` of the `subcast registers` of `wR` )
-                deem+ `s` the waycast at `sR.location`
-                + `apply patches( f, s )`
-            + `apply patches( f, w )`
+        apply patches( subsumed path `t` of the target file,  waycast `w`,  waycast register `wR` )
+            deem+ `isRegistrantOwned` a boolean flag, initially false, to tell whether `t` is native
+                     to `w` or a registered subcast of `w`
+            a) Patches of the registered subcasts of `w`
+                for( each waycast register `sR` of the `subcast registers` of `wR` )
+                    deem+ `s` the waycast at `sR.location`
+                    if( `isRegistrantOwned` )
+                        + `record suppression of patches( t, s, prior-branch targeting, sR )`
+                    else
+                        + Set `isRegistrantOwned` to `apply patches(t,s,sR) || isRegistrantOwned`.
+            b) Patches of `w` itself
+                + Set `isRegistrantOwned` to `apply patches(t,w,null) || isRegistrantOwned`.
+            return+ `isRegistrantOwned`
+
 
         ───────────────────
          patch suppression
         ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
             - The application of a patch may be suppressed owing to one of several causes,
               which are formalized as follows.
-            `native dormant`
-            `prior-subcast targeting`
-            `self targeting` (actually an error)
-                - The patch targets its own waycast.
-                - This actually causes a compilation error, not a patch suppression.
-                    / It is included only because of its similarity to the other ‘targeting’ causes.
-                    : re `compilation error` e.g. `^^throw. Patch.+ targets its own waycast` @
-                      `^^apply patches\($`
-            `surcast targeting`
 
+                `native dormant`
+                `prior-branch targeting`
+                    - The target is native to a waycast registered in a prior branch of the hierarchy,
+                      a branch whose patches will already have been applied to the target.
+                    - A surcast has registered the present branch at a lower priority.
+                        - Typically this occurs when the surcaster has surjoined a new subcast
+                          and must therefore assign it a priority.
+                        - Often he assigns a lower priority in the hope of gaining from the subcast
+                          what he sees in it, while suffering no unexpected (and often unseen) loss
+                          as a side effect of its patches.
+                    - For this reason the patch is suppressed.
+                      It targets a file which the surcaster may prefer to leave unaltered.
+                `self targeting`
+                    - The patch targets its own waycast.
+                    - This causes a compilation error, in fact, not a patch suppression.
+                        / It is included here only because of its similarity
+                          to the other ‘targeting’ causes.
+                        : re `compilation error` e.g. `^^throw. Patch.+ targets its own waycast` @
+                          `^^apply patches\($`
+                `surcast targeting`
+
+            record suppression of patch( subsumed path `t` of the target file,  native waycast `w`,
+                      cause of suppression `cS`, patch `p` )
+                + Record for the user a message that the application of patch `p` native of `w`
+                  to target `t` has been suppressed owing to cause `cS`.
+                    / Compilers may include further data (e.g. attached to `cS`)
+                      in order to form a message helpful to the user.
+
+            record suppression of patches( subsumed path `t` of the target file,  waycast `w`,
+                      cause of suppression `cS`, waycast register `wR` )
+                a) Patches of the subcast registers of `wR`
+                    for( each waycast register `sR` of the `subcast registers` of `wR` )
+                        deem+ `s` the waycast at `sR.location`
+                        + `record patch suppression( f, s, cS, sR )`
+                b) Patches of the `wR` waycast itself
+                    + `apply patches( f, w, cS )`
+                        / In fact, this records the suppression of any that *would* have applied.
 
 
 
