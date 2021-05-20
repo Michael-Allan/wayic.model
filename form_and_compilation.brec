@@ -145,6 +145,8 @@ Form and compilation of way models
     ────────────────
         waycast register
             - The register of a waycast `w`.
+            - It defines the hierarchic order of waycasts (surcasts and subcasts)
+              that in turn governs the order of patch application.
             location, URI
                 - The canonical location of `w`.
                 : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
@@ -157,9 +159,20 @@ Form and compilation of way models
 
 
 
-    ━━━━━━━━━━
-     Patching
-    ──────────
+    ━━━━━━━━━━━━━━━━━━━
+     Patch application
+    ───────────────────
+        - Each file is patched immediately on its subsumption.
+        - Patches are applied to the file in a hierarchic order derived from the waycast registers `wR`,
+          beginning with that of the local waycast.
+            : re `that of the local waycast` see `^^local waycast register$`
+            a) First to apply are the patches of the subcast registers of `wR`.
+                : see `^^subcast registers` @ `^^waycast register$`
+            b) Last to apply are the patches of the `wR` waycast itself.
+        - This order recurses at step (a), wherein both steps (a, b) repeat for each subcast register
+          (itself now `wR`) in turn.
+            / In terms of tree structures, this is a depth-first post-order traversal.
+
         apply patches( subsumed file path `f`, waycast `w` )
             deem+ `isOwnFile` a boolean flag, telling whether `f` is a subsumed file of `w`
             for( each Breccian file `g` of `w` in lexicographic path order )
@@ -229,7 +242,8 @@ Form and compilation of way models
                 for( each relative URI reference `r` in the copy )
                     + Replace `r` with an absolute reference, that of `r` resolved against `u`.
                 + `apply patches( f, local waycast, local waycast register )`
-                    : see `^^patch\(` @ `^^ Patching$`
+                    : see `^^apply patches\( subsumed file path.+waycast register` @
+                      `^^ Patch application$`
             return+ `f`
 
         subsume and patch subjoints( fractum `f` of the model )
