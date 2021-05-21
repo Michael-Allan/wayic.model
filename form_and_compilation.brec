@@ -172,25 +172,21 @@ Form and compilation of way models
           (itself now `wR`) in turn.
             / In terms of tree structures, this is a depth-first post-order traversal.
 
-        apply patches( subsumed path `t` of the target file,  waycast `w`,  cause of suppression `cS` )
+        apply patches( subsumed path `t` of the target file,  waycast `w` )
             / Returns true if target `t` is native to `w`.
             deem+ `isSelfOwned` a boolean flag telling whether `t` is native to `w`
-            for( each Breccian file `g` of `w` in lexicographic path order )
-                for( each patch `p` of `g` in linear order )
+            for( each Breccian file `f` of `w` in lexicographic path order )
+                for( each patch `p` of `f` in linear order )
                     if( the target of `p` has the same canonical location as the original of `t` )
-                        : see `The.+components of the subsumed file.+are those of its canonical location`
+                        : see `The.+components of the subsumed file.+are.+of its canonical location`
                           @ `^^ Subsumption$`
                         if( `isSelfOwned` )
                             throw+ Patch `p` targets its own waycast `w`
                                 : see `target must lie.+remote` @ `^^ Patch$` @
                                   http://reluk.ca/project/wayic/Waybrec/language_definition.brec
-                        if( `cS` is null )
-                            + `apply( p, t )`
-                                : see `^^apply\(` @ `^^ Patch$` @
-                                  http://reluk.ca/project/wayic/Waybrec/language_definition.brec
-                        else
-                            + `record patch suppression( p, w, t, cS )`
-                                : see `^^record patch suppression\(`
+                        + `apply( p, t )`
+                            : see `^^apply\(` @ `^^ Patch$` @
+                              http://reluk.ca/project/wayic/Waybrec/language_definition.brec
             return+ `isSelfOwned`
 
         apply patches( subsumed path `t` of the target file,  waycast `w`,  waycast register `wR` )
@@ -199,10 +195,10 @@ Form and compilation of way models
             a) Patches of the registered subcasts of `w`
                 for( each waycast register `sR` of the `subcast registers` of `wR` )
                     deem+ `s` the waycast at `sR.location`
-                    if( `isRegistrantOwned` )
-                        + `record suppression of patches( t, s, prior-branch targeting, sR )`
-                    else
+                    if( not `isRegistrantOwned` )
                         + Set `isRegistrantOwned` to `apply patches(t,s,sR) || isRegistrantOwned`.
+                    else
+                        + `record suppression of patches( t, s, prior-branch targeting, sR )`
             b) Patches of `w` itself
                 + Set `isRegistrantOwned` to `apply patches(t,w,null) || isRegistrantOwned`.
             return+ `isRegistrantOwned`
@@ -235,7 +231,7 @@ Form and compilation of way models
                           `^^apply patches\($`
                 `surcast targeting`
 
-            record suppression of patch( subsumed path `t` of the target file,  native waycast `w`,
+            record suppression of patch( subsumed path `t` of the target file,  waycast `w`,
                       cause of suppression `cS`, patch `p` )
                 + Record for the user a message that the application of patch `p` native of `w`
                   to target `t` has been suppressed owing to cause `cS`.
@@ -243,14 +239,22 @@ Form and compilation of way models
                       in order to form a message helpful to the user.
 
             record suppression of patches( subsumed path `t` of the target file,  waycast `w`,
+                      cause of suppression `cS` )
+                for( each Breccian file `f` of `w` in lexicographic path order )
+                    for( each patch `p` of `f` in linear order )
+                        if( the target of `p` has the same canonical location as the original of `t` )
+                            : see `The.+components of the subsumed file.+are.+of its canonical location`
+                              @ `^^ Subsumption$`
+                            + `record record suppression of patch( t, w, cS, p )`
+
+            record suppression of patches( subsumed path `t` of the target file,  waycast `w`,
                       cause of suppression `cS`, waycast register `wR` )
-                a) Patches of the subcast registers of `wR`
+                a) Patches of the registered subcasts of `w`
                     for( each waycast register `sR` of the `subcast registers` of `wR` )
                         deem+ `s` the waycast at `sR.location`
-                        + `record patch suppression( f, s, cS, sR )`
-                b) Patches of the `wR` waycast itself
-                    + `apply patches( f, w, cS )`
-                        / In fact, this records the suppression of any that *would* have applied.
+                        + `record suppression of patches( t, s, cS, sR )`
+                b) Patches of `w` itself
+                    + `record suppression of patches( t, w, cS )`
 
 
 
