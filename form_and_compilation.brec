@@ -24,11 +24,10 @@ Form and compilation of way models
                     throw+ Disallowed file name
                 + Add to the model all files of `w`.
             2. Registration of subcasts
-                deem+ `λ` the canonical location of the local waycast;
-                      `λλ` a set of waycast locations, initially empty
+                deem+ `λ` the canonical location of the local waycast
                 + Add `λ` to `λλ`.
                 + Set the `local waycast register` of the data store
-                  to `make register( local waycast, λ, λλ )`.
+                  to `make register( local waycast, λ )`.
             3. Subsumption and patching of extracast files
                 a) Explicitly via subsumers \ Before (b), while the model contains local subsumers only.
                     for( each subsumer `s` of the model  )
@@ -49,7 +48,7 @@ Form and compilation of way models
                       & `iR` is without an `uninterned` qualifier,
                       & the URI reference of `iR` is a proper URI `u` )
                         : re `proper URI` see https://tools.ietf.org/html/rfc3986#section-3
-                        deem+ `p` a file path, that of `intramodel path( u )`
+                        deem+ `p` a file path, that of `intramodel path( standardize( u ))`
                         if( a file is present at `p` )
                             + `intern reference( rA, u, p )`
             5. Compilation
@@ -87,17 +86,17 @@ Form and compilation of way models
                       is left uninterned, referring outside the way model.’
             return+ `(rA, wasInterned)`
 
-        intramodel path( URI `u` )
+        intramodel path( standardized URI `u` )
+            : re `standardized` see `^^standardized\(`
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
             / The path proper to any intramodel instance of the referent of `u`.
                 : re `intramodel instance` see @ `^^- Regardless of the various forms of reference`
-            + Set `u` to `standardize( u )`.
             if( `u` begins with the canonical location `λ` of the local waycast )
                 return+ `u` relativized against `λ`
             return+ the subsumption path derived from `u`
                 : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
 
-        make register( waycast `w`, waycast canonical location `λ`, set of registered locations `λλ` )
+        make register( waycast `w`, waycast canonical location `λ` )
             / Makes a complete waycast register for `w`.  Assumes that already `λλ` contains `λ`.
             deem+ `r` a new waycast register
             + Set the `location` of `r` to `λ`.
@@ -105,7 +104,7 @@ Form and compilation of way models
                 + Set `λ` to the canonical location of `s`.
                 unless( `λλ` contains `λ` )
                     + Add `λ` to `λλ`.
-                    + Append `make register(s,λ,λλ)` to the `subcast registers` of `r`.
+                    + Append `make register(s,λ)` to the `subcast registers` of `r`.
             return+ `r`
 
         standardize( URI `u` )
@@ -127,6 +126,9 @@ Form and compilation of way models
     ━━━━━━━━━━━━
      Data store
     ────────────
+        λλ
+            - The set of canonical locations of registered waycasts.
+                : see `^^location` @ `^^waycast register$`
         local waycast register
             - The waycast register of the local waycast.
             / Initial value, null.
@@ -202,7 +204,10 @@ Form and compilation of way models
                         + `record suppression of any patches( t, s, cS, sR )`
             b) Patches of `w` itself
                 if( not `isSelfOwned` )
-                    + `apply patches( t, w )`
+                    if( `isRegistrantOwned` )
+                        + `apply patches( t, w )`
+                    else \ [native dormancy], q.v. at end note
+                        + `record suppression of any patches( t, w, native dormancy )`
                 else
                     + `record suppression of any patches( t, w, self targeting )`
             return+ `isRegistrantOwned`
@@ -214,10 +219,19 @@ Form and compilation of way models
             - The application of a patch may be suppressed owing to one of several causes,
               which are formalized as follows.
 
-                `native dormant`
+                `native dormancy`
+                    - The patch has no effect in the model of its native waycast,
+                      because there its target is unsubsumed.
+                        : see `Patches whose targets fall within the way model alone are applied` @
+                          http://reluk.ca/project/wayic/Waybrec/language_definition.brec
+                    - Likely it was subsumed in the past, then disappeared and left the patch
+                      lying dormant there, its target now out of reach.
+                    - The target reappears here in the present model, but rather than activate and apply
+                      to it a patch which has lain dormant and probably unmaintained in its native model,
+                      the patch is here suppressed.
                 `prior-branch targeting`
                     - The patch targets a file native to a waycast registered in a prior branch
-                      of the hierarchy.
+                      of the register hierarchy.
                     - A surcast has registered the present branch at a lower priority.
                         - Typically this occurs when the surcaster has surjoined a new subcast
                           and must therefore assign it a priority.
@@ -310,10 +324,17 @@ Form and compilation of way models
             / Subsumes and patches the referent of `u` unless it is proper to the waycast
               or was already subsumed.  Returns the value of `intramodel path( u )`.
                 : re `intramodel path` see `^^intramodel path\(` @ `^^ Compilation$`
-            deem+ `f` a file path, that of `intramodel path( u )`
+            deem+ `v` a standardized URI, that of `standardize( u )`;
+                  `f` a file path, that of `intramodel path( v )`
+                : see `^^standardized\(` @ `^^ Compilation$`
                 : see `^^intramodel path\(` @ `^^ Compilation$`
             if( `f` is a subsumption path  &  no file is present at `f` )
                 : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
+                if( `v` refers to a waycast file )
+                    deem+ `λ` the waycast location of `v`
+                    unless( `λλ` contains `λ` )
+                        throw+ Attempt to subsume file `u` native of waycast `λ`,
+                          unregistered as a subcast
                 + Copy the referent of `u` to `f`.
                 for( each relative URI reference `r` in the copy )
                     + Replace `r` with an absolute reference, that of `r` resolved against `u`.
@@ -355,6 +376,29 @@ Form and compilation of way models
                 + Set `f` to `t`.
             / Fractum `f` lies within the model. \ ∵ any `u` above was subsumed to a relative reference
             + `subsume and patch subjoints( f )`
+
+
+
+  \ ━━━━━━
+  \  Note
+  \ ──────
+     \\ [native dormancy]
+     \      - At this point, `isRegistrantOwned` is false.
+     \      ∴ No registered subcast of `w` owns target file `t` in the present model.
+     \      ∴ No registered subcast in the model of `w` owns `t`.
+     \          ∵ Otherwise, in the present model, that subcast (here unregistered for `w`) must instead
+     \            be registered for a surcast or waycast of a prior branch of the register hierarchy,
+     \            in which case this point would never have been reached.
+     \              ∵ Rather than `apply patches` of `w`, the compiler would have suppressed their
+     \                application for the cause of `surcast targeting` or `prior-branch targeting`.
+     \      ∴ File `t` in the model of `w` would be unsubsumed.
+     \          ∵ Subsumption of any file depends on its native waycast being registered as a subcast.
+     \              : see `^^throw.+native of waycast.+\N.+unregistered as a subcast$` @
+     \                `^^subsume and patch referent\(`
+     \      ∴ The model of `w` would apply to `t` no patch.
+     \      ∴ The model of `w` would apply to `t` no patch declared by `w`.
+     \        Such a patch would, in other words, lie dormant in its native model.
+     \      ∴ Application of all such patches is here suppressed for the cause of `native dormancy`.
 
 
 
