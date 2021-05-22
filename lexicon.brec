@@ -23,10 +23,23 @@ Definition of terms for project Way Modelling
     remote, of a waycast, waysource or cast file
         ─ adjective
             - Not local.
+    subcast
+        ─ noun
+            - A waycast from which a way model subsumes one or more extracast files.
+    subcaster
+        ─ noun
+            - The waycaster of a subcast.
     subsume
         ─ verb, with object
             - To copy and store (an extracast file) into a way model.
                 : see `extracast files .+ copied and stored within the model` @ form_and_compilation.brec
+    surcast
+        ─ noun
+            - A waycast whose model subsumes one or more files of another waycast.
+                : re `model` see `^^way model$`
+    surcaster
+        ─ noun
+            - The waycaster of a surcast.
     thoroughfracta
         ─ plural noun
             : see `^^thoroughfractum$`
