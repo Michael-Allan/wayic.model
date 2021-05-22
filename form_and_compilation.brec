@@ -60,7 +60,7 @@ Form and compilation of way models
             / Transforms `rA` to refer instead to `p`, then writes `rA` back into the model.
               Returns `(rA, wasInterned)`, the resulting associative reference `rA` plus boolean flag
               `wasInterned`.  The flag will be false if internment failed, in which case `rA` will have
-              been added to the data store’s loose references and will retain its original form.
+              been added to the data store’s stray references and will retain its original form.
             deem+ `wasInterned` a boolean flag, initially false
             if( `p` is no subsumption path )
                 : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
@@ -68,7 +68,7 @@ Form and compilation of way models
                   to the relative path from the file of `rA` to that of `p`. \ The same as below.
                 + Write the transformed `rA` into the model, replacing its original instance.
                 + Set `wasInterned` to true.
-            else if( `rA` is absent from the loose references of the data store )
+            else if( `rA` is absent from the stray references of the data store )
                 + Transform `rA` by setting its resource indicator’s URI reference (presently `u`)
                   to the relative path from the file of `rA` to that of `p`. \ The same as above.
                 try
@@ -80,8 +80,8 @@ Form and compilation of way models
                 catch( broken reference, pattern not found )
                     + Revert `rA` to its original form by setting its resource indicator’s
                       URI reference back to `u`.
-                    + Add `rA` to the loose references of the data store.
-                    + Warn of `(rA, u)`, ‘Loose reference `rA`: its referent could not be found
+                    + Add `rA` to the stray references of the data store.
+                    + Warn of `(rA, u)`, ‘Stray reference `rA`: its referent could not be found
                       in the subsumed instance of its referent file `u`, and therefore `rA`
                       is left uninterned, referring outside the way model.’
             return+ `(rA, wasInterned)`
@@ -132,10 +132,11 @@ Form and compilation of way models
         local waycast register
             - The waycast register of the local waycast.
             / Initial value, null.
-        loose references
-            - The set of associative references each of which failed to subsume because its referent
-              could not be found in the subsumed instance of the referent file.
-                / This may occur, for instance, owing to patch suppression.
+        stray references
+            - The set of associative references each of which retains its original, uninterned form
+              only because an internment attempt had failed to find its referent
+              in the subsumed instance of the referent file.
+                / E.g. because patches targeting the referent file have been suppressed.
                 / Initial value, empty.
             / The corresponding referents, lying outside the way model, are off-way by definition.
 
@@ -316,7 +317,7 @@ Form and compilation of way models
           the way model has at most one, intramodel instance of the file to which all such references
           (where not precluded by model divergence) are transformed (interned).
             : re `intramodel instance` see `^^intramodel path\(` @ `^^ Compilation$`
-            : re `precluded by model divergence` see `^^loose references$` @ `^^ Data store$`
+            : re `precluded by model divergence` see `^^stray references$` @ `^^ Data store$`
         - A public way model includes its subsumptions, to which other waysource may refer.
             / The following, for example, refers to a publicly subsumed file.
               http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec
