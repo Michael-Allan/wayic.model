@@ -164,7 +164,8 @@ Form and compilation of way models
     ━━━━━━━━━━━━━━━━━━━
      Patch application
     ───────────────────
-        - Each file is patched immediately on its subsumption.
+        - Subsumed files alone are patched, each immediately on its subsumption.
+            : re `^^Subsumed files alone$` see `^^\`self targeting\`$` @ `^^ patch suppression$`
         - Patches are applied to the file in a hierarchic order derived from the waycast registers `wR`,
           beginning with that of the local waycast.
             : re `that of the local waycast` see `^^local waycast register$`
