@@ -175,7 +175,7 @@ Form and compilation of way models
             / In terms of tree structures, this is a depth-first post-order traversal.
 
         apply patches( subsumed path `t` of the target file,  waycast `w` )
-            for( each Breccian file `f` of `w` in lexicographic path order )
+            for( each Breccian file `f` of `w` in standard path order )
                 for( each patch `p` of `f` in linear order )
                     if( the target of `p` has the same canonical location as the original of `t` )
                         : see `The.+components of the subsumed file.+are.+of its canonical location`
@@ -211,6 +211,14 @@ Form and compilation of way models
                 else
                     + `record suppression of any patches( t, w, self targeting )`
             return+ `isRegistrantOwned`
+
+        standard path order
+            - An arrangement among file paths determined by applying the Unicode Collation Algorithm
+              to their string representations.
+                : re `^^Unicode Collation Algorithm$` see https://unicode.org/reports/tr10/
+                : re `^^Unicode Collation Algorithm$` e.g. http://site.icu-project.org/
+            - How to apply this algorithm (e.g. language and other customizations) is yet undefined.
+                / It may require formalizing a locale property for the waycast.
 
 
         ───────────────────
@@ -254,7 +262,7 @@ Form and compilation of way models
 
             record suppression of any patches( subsumed path `t` of the target file,  waycast `w`,
                       cause of suppression `cS` )
-                for( each Breccian file `f` of `w` in lexicographic path order )
+                for( each Breccian file `f` of `w` in standard path order )
                     for( each patch `p` of `f` in linear order )
                         if( the target of `p` has the same canonical location as the original of `t` )
                             : see `The.+components of the subsumed file.+are.+of its canonical location`

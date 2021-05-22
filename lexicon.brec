@@ -12,9 +12,6 @@ Definition of terms for project Way Modelling
               of its original referent.
                 : see `intramodel instance.+to which.+references.*\R.+transformed \(interned\)` @
                   form_and_compilation.brec
-    lexicographic path order
-        ─ mass noun
-            - A lexicographic arrangement of file paths based on their Unicode code points.
     off-way
         ─ adjective and adverb
             - Not on-way.
