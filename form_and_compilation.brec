@@ -43,48 +43,44 @@ Form and compilation of way models
                             : see `^^subsume and patch subjoints\(` @ `^^ Subsumption$`
             4. Internment of references
                 : see also `(intern reference)` @ `^^subsume and patch through`
-                for( each associative reference `rA` of the model  )
-                    if( `rA` has a resource indicant `iR`,
-                      & `iR` is without an `uninterned` qualifier,
-                      & the URI reference of `iR` is a proper URI `u` )
-                        : re `proper URI` see https://tools.ietf.org/html/rfc3986#section-3
-                        deem+ `p` a file path, that of `intramodel path( standardize( u ))`
+                for( each remote associative reference `rAR` of the model  )
+                    if( `rAR` is without an `uninterned` qualifier )
+                        deem+ `u` the URI of `rAR`;
+                              `p` a file path, that of `intramodel path( standardize( u ))`
                         if( a file is present at `p` )
-                            + `intern reference( rA, u, p )`
+                            + `intern reference( rAR, u, p )`
             5. Compilation
 
-        intern reference( internable associative reference `rA` of the model,
+        intern reference( remote associative reference `rA` of the model,
               URI `u` equal to the URI reference of the resource indicator of `rA`,
               path `p` of the intramodel instance of the referent of `u` )
                 : re `(URI) \`u\`` see https://tools.ietf.org/html/rfc3986#section-3
-            / Transforms `rA` to refer instead to `p`, then writes `rA` back into the model.
-              Returns `(rA, wasInterned)`, the resulting associative reference `rA` plus boolean flag
-              `wasInterned`.  The flag will be false if internment failed, in which case `rA` will have
-              been added to the data store’s stray references and will retain its original form.
-            deem+ `wasInterned` a boolean flag, initially false
-            if( `p` is no subsumption path )
+            / Attempts to transform `rA` within the model to refer instead to `p`.
+              Returns `(rA2, wasInterned)`, the result `rA2` plus boolean flag `wasInterned`.
+              The flag will be false if internment failed, in which case `rA2` will equal `rA`
+              and will have been added to the data store’s stray references.
+            deem+ `isSubsumption` a boolean flag telling whether `p` is a subsumption path
                 : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
-                + Transform `rA` by setting its resource indicator’s URI reference (presently `u`)
-                  to the relative path from the file of `rA` to that of `p`. \ The same as below.
-                + Write the transformed `rA` into the model, replacing its original instance.
-                + Set `wasInterned` to true.
-            else if( `rA` is absent from the stray references of the data store )
-                + Transform `rA` by setting its resource indicator’s URI reference (presently `u`)
-                  to the relative path from the file of `rA` to that of `p`. \ The same as above.
+            if( `isSubsumption`  &&  already `rA` is present in the stray references of the data store )
+                return+ `(rA, false)`
+            deem+ `rAL` an associative reference, intially equal in form to `rA`;
+                  `wasInterned` a boolean flag, initially false
+            + Transform `rAL` by setting its resource indicator’s URI reference (presently `u`)
+              to the relative path from the file of `rA` to that of `p`.
+            if( `isSubsumption` )
                 try
-                    + `referent( rA )`
+                    + `referent( rAL )`
                         : see `^^referent\( associative reference \)` @
                           http://reluk.ca/project/Breccia/language_definition.brec
-                    + Write the transformed `rA` into the model, replacing its original instance.
-                    + Set `wasInterned` to true.
                 catch( broken reference, pattern not found )
-                    + Revert `rA` to its original form by setting its resource indicator’s
-                      URI reference back to `u`.
                     + Add `rA` to the stray references of the data store.
                     + Warn of `(rA, u)`, ‘Stray reference `rA`: its referent could not be found
                       in the subsumed instance of its referent file `u`, and therefore `rA`
                       is left uninterned, referring outside the way model.’
-            return+ `(rA, wasInterned)`
+                    return+ `(rA, false)`
+            + Write `rAL` into the model in place of `rA`.
+            + Set `wasInterned` to true.
+            return+ `(rAL, wasInterned)`
 
         intramodel path( standardized URI `u` )
             : re `standardized` see `^^standardized\(`
@@ -366,11 +362,10 @@ Form and compilation of way models
             if( `j` has a resource indicant `iR` )
                 if( `iR` has either a `non-fractal` or an `uninterned` qualifier )
                     return+
-                if( the URI reference of `iR` is a proper URI `u` )
-                    : re `proper URI` see https://tools.ietf.org/html/rfc3986#section-3
-                    deem+ `p` a file path;
+                if( `iR` is a remote resource indicant )
+                    deem+ `u` the URI of `iR`;
+                          `p` a file path, that of `subsume and patch referent( u )`;
                           `wasInterned` a boolean flag
-                    + Set `p` to `subsume and patch referent( u )`.
                     + Set `(j, wasInterned)` to `intern reference( j, u, p )`.
                         : see `^^intern reference\(` @ `^^ Compilation$`
                     unless( wasInterned )
