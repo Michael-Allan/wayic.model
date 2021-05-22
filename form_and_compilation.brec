@@ -209,6 +209,7 @@ Form and compilation of way models
                         + `apply patches( t, w )`
                     else \ [native dormancy], q.v. at end note
                         + `record suppression of any patches( t, w, native dormancy )`
+                            : re `native dormancy` see `^^determination of native dormancy` @ `^^ Note$`
                 else
                     + `record suppression of any patches( t, w, self targeting )`
             return+ `isRegistrantOwned`
@@ -388,26 +389,26 @@ Form and compilation of way models
 
 
 
-  \ ━━━━━━
-  \  Note
-  \ ──────
-     \\ [native dormancy]
-     \      - At this point, `isRegistrantOwned` is false.
-     \      ∴ No registered subcast of `w` owns target file `t` in the present model.
-     \      ∴ No registered subcast in the model of `w` owns `t`.
-     \          ∵ Otherwise, in the present model, that subcast (here unregistered for `w`) must instead
-     \            be registered for a surcast or waycast of a prior branch of the register hierarchy,
-     \            in which case this point would never have been reached.
-     \              ∵ Rather than `apply patches` of `w`, the compiler would have suppressed their
-     \                application for the cause of `surcast targeting` or `prior-branch targeting`.
-     \      ∴ File `t` in the model of `w` would be unsubsumed.
-     \          ∵ Subsumption of any file depends on its native waycast being registered as a subcast.
-     \              : see `^^throw.+native of waycast.+\N.+unregistered as a subcast$` @
-     \                `^^subsume and patch referent\(`
-     \      ∴ The model of `w` would apply to `t` no patch.
-     \      ∴ The model of `w` would apply to `t` no patch declared by `w`.
-     \        Such a patch would, in other words, lie dormant in its native model.
-     \      ∴ Application of all such patches is here suppressed for the cause of `native dormancy`.
+    ━━━━━━
+     Note
+    ──────
+        determination of native dormancy
+            - No registered subcast of `w` owns target file `t` in the present model.
+                ∵ `isRegistrantOwned` is false.
+            ∴ No registered subcast in the model of `w` owns `t`.
+                ∵ Otherwise, in the present model, that subcast (here unregistered for `w`) must instead
+                  be registered for a surcast or waycast of a prior branch of the register hierarchy,
+                  in which case this point in the compilation process would never have been reached.
+                    ∵ Rather than `apply patches` of `w`, the compiler would have suppressed their
+                      application for the cause of `surcast targeting` or `prior-branch targeting`.
+            ∴ File `t` in the model of `w` would be unsubsumed.
+                ∵ Subsumption of any file depends on its native waycast being registered as a subcast.
+                    : see `^^throw.+native of waycast.+\N.+unregistered as a subcast$` @
+                      `^^subsume and patch referent\(`
+            ∴ The model of `w` would apply to `t` no patch.
+            ∴ The model of `w` would apply to `t` no patch declared by `w`.
+              Such a patch would, in other words, lie dormant in its native model.
+            ∴ Application of all such patches is here suppressed for the cause of `native dormancy`.
 
 
 
