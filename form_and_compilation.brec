@@ -308,23 +308,34 @@ Form and compilation of way models
         - Subsumption serves several purposes, which include the following.
             • Collation of the way model from scattered waysource.
             • Patching of waysource that would otherwise be out of reach.
-            • Ease of surjoining remote way models, or otherwise referring into them.
+            • Ease of surjoining public way models, or otherwise referring into them.
                 : see `^^- A public way model .+ to which other waysource may refer\.$`
-        - Regardless of the various forms of reference to an extracast file, whether to its original
-          or a remote subsumption of it (any number of which may be combined in the waysource),
-          the way model has at most one, intramodel instance of the file to which all such references
-          (where not precluded by model divergence) are transformed (interned).
-            : re `intramodel instance` see `^^intramodel path\(` @ `^^ Compilation$`
-            : re `precluded by model divergence` see `^^stray references$` @ `^^ Data store$`
         - A public way model includes its subsumptions, to which other waysource may refer.
-            / The following, for example, refers to a publicly subsumed file.
-              http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec
-            - The referent, in that case, would be the file as seen in the subsuming way model (M).
-                / E.g. `https://cleo.abacus.au/walt/waycast/foo.brec`
-                  as seen in `http://reluk.ca/project/waycast/`.
-            - Compiling a jointer to such a referent would subsume the file from its native waycast,
-              and apply to it (subject to patch suppression) not only the patches of its native model,
-              but additionally those of M.
+            / For example, `http://reluk.ca/project/waycast/:/cleo.abacus.au/walt/waycast/foo.brec`.
+            - The referent, in that case, would be the file as it appears (as it is patched, that is)
+              in the subsuming way model (S).
+                / So (to continue the example) file `https://cleo.abacus.au/walt/waycast/foo.brec`
+                  as it appears in model `http://reluk.ca/project/waycast/`.
+            - Compiling a jointer to such a file would subsume the file from its native waycast
+              and apply to it (subject to patch suppression) the patches of S.
+        - Regardless of the form of jointing to an extracast file, whether to the original in its native
+          waycast, a duplicate in that waycast’s public model (M), or its remote subsumption in another
+          model (S) — any number of which may be combined in the waysource — the following hold true.
+            • The way model subsumes a single intramodel instance of the file, to which all references
+              (where not precluded by model divergence or explicit exemption) are transformed (interned).
+                : re `intramodel instance` see `^^intramodel path\(` @ `^^ Compilation$`
+                : re `model divergence` see `^^stray references$` @ `^^ Data store$`
+                : re `explicit exemption` see `^^uninterned` @
+                  http://reluk.ca/project/wayic/refractory/index.brec
+            • The way model requires that M be registered as a subcast of the model, meaning that M must
+              be declared as a subcast either by the local waycast, or by an already registered subcast.
+            • The way model inherits the patches of M and applies them (subject to patch suppression)
+              wherever they find their targets among the subsumed files of the model.
+        - Additionally, for any jointer to a remote subsumption of the file in S:
+            • The way model requires, likewise, that S be registered as a subcast.
+                : cf. `^^• The way model requires that M be registered as a subcast`
+            • The way model inherits the patches of S.
+                : cf. `^^• The way model inherits the patches of M`
 
         subsume and patch referent( URI `u` )
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
