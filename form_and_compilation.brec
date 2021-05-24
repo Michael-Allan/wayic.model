@@ -47,50 +47,12 @@ Form and compilation of way models
                     if( `rAR` is without an `uninterned` qualifier )
                         deem+ `u` the URI of `rAR`;
                               `p` a file path, that of `intramodel path( standardize( u ))`
+                                : re `intramodel path` see `^^intramodel path\(` @ `^^ Subsumption$`
+                                : re `standardize`     see `^^standardize\(`     @ `^^ Subsumption$`
                         if( a file is present at `p` )
                             + `intern reference( rAR, u, p )`
+                                : see `^^intern reference\(` @ `^^ Subsumption$`
             5. Compilation
-
-        intern reference( remote associative reference `rA` of the model,
-              URI `u` equal to the URI reference of the resource indicator of `rA`,
-              path `p` of the intramodel instance of the referent of `u` )
-                : re `(URI) \`u\`` see https://tools.ietf.org/html/rfc3986#section-3
-            / Attempts to transform `rA` within the model to refer instead to `p`.
-              Returns `(rA2, wasInterned)`, the result `rA2` plus boolean flag `wasInterned`.
-              The flag will be false if internment failed, in which case `rA2` will equal `rA`
-              and will have been added to the data store’s stray references.
-            deem+ `isSubsumption` a boolean flag telling whether `p` is a subsumption path
-                : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
-            if( `isSubsumption`  &&  already `rA` is present in the stray references of the data store )
-                return+ `(rA, false)`
-            deem+ `rAL` an associative reference, intially equal in form to `rA`;
-                  `wasInterned` a boolean flag, initially false
-            + Transform `rAL` by setting its resource indicator’s URI reference (presently `u`)
-              to the relative path from the file of `rA` to that of `p`.
-            if( `isSubsumption` )
-                try
-                    + `referent( rAL )`
-                        : see `^^referent\( associative reference \)` @
-                          http://reluk.ca/project/Breccia/language_definition.brec
-                catch( broken reference, pattern not found )
-                    + Add `rA` to the stray references of the data store.
-                    + Warn of `(rA, u)`, ‘Stray reference `rA`: its referent could not be found
-                      in the subsumed instance of its referent file `u`, and therefore `rA`
-                      is left uninterned, referring outside the way model.’
-                    return+ `(rA, false)`
-            + Write `rAL` into the model in place of `rA`.
-            + Set `wasInterned` to true.
-            return+ `(rAL, wasInterned)`
-
-        intramodel path( standardized URI `u` )
-            : re `standardized` see `^^standardized\(`
-            : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
-            / The path proper to any intramodel instance of the referent of `u`.
-                : re `intramodel instance` see @ `^^- Regardless of the various forms of reference`
-            if( `u` begins with the canonical location `λ` of the local waycast )
-                return+ `u` relativized against `λ`
-            return+ the subsumption path derived from `u`
-                : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
 
         make register( waycast `w`, waycast canonical location `λ` )
             / Makes a complete waycast register for `w`.  Assumes that already `λλ` contains `λ`.
@@ -103,20 +65,6 @@ Form and compilation of way models
                     + Append `make register(s,λ)` to the `subcast registers` of `r`.
             return+ `r`
 
-        standardize( URI `u` )
-            : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
-            / Returns the standard form of `u` for subsumption purposes.
-            if( `u` lacks an authority component )
-                throw+ Malformed reference
-            if( `u` refers to a waycast file )
-                + Set `u` to `canonicalize( u )`.
-                    : re `canonicalize` see `canonicalize\( URI` @ `^^ Canonical location$` @
-                      http://reluk.ca/project/wayic/cast/form_of_a_waycast.brec
-            else
-                + Set `u` to normal form.
-                    : see https://tools.ietf.org/html/rfc3986#section-6
-            return+ `u`
-
 
 
     ━━━━━━━━━━━━
@@ -125,6 +73,7 @@ Form and compilation of way models
         λλ
             - The set of canonical locations of registered waycasts.
                 : see `^^location` @ `^^waycast register$`
+            / Initial value, empty.
         local waycast register
             - The waycast register of the local waycast.
             / Initial value, null.
@@ -323,7 +272,7 @@ Form and compilation of way models
           model (S) — any number of which may be combined in the waysource — the following hold true.
             • The way model subsumes a single intramodel instance of the file, to which all references
               (where not precluded by model divergence or explicit exemption) are transformed (interned).
-                : re `intramodel instance` see `^^intramodel path\(` @ `^^ Compilation$`
+                : re `intramodel instance` see `^^intramodel path\(`
                 : re `model divergence` see `^^stray references$` @ `^^ Data store$`
                 : re `explicit exemption` see `^^uninterned` @
                   http://reluk.ca/project/wayic/refractory/index.brec
@@ -337,22 +286,92 @@ Form and compilation of way models
             • The way model inherits the patches of S.
                 : cf. `^^• The way model inherits the patches of M`
 
+        intern reference( remote associative reference `rA` of the model,
+              URI `u` equal to the URI reference of the resource indicator of `rA`,
+              path `p` of the intramodel instance of the referent of `u` )
+                : re `(URI) \`u\`` see https://tools.ietf.org/html/rfc3986#section-3
+            / Attempts to transform `rA` within the model to refer instead to `p`.
+              Returns `(rA2, wasInterned)`, the result `rA2` plus boolean flag `wasInterned`.
+              The flag will be false if internment failed, in which case `rA2` will equal `rA`
+              and will have been added to the data store’s stray references.
+            deem+ `isSubsumption` a boolean flag telling whether `p` is a subsumption path
+                : re `subsumption path` see `are .+subsumed.+\R.+at a path formed as follows`
+            if( `isSubsumption`  &&  already `rA` is present in the stray references of the data store )
+                return+ `(rA, false)`
+            deem+ `rAL` an associative reference, intially equal in form to `rA`;
+                  `wasInterned` a boolean flag, initially false
+            + Transform `rAL` by setting its resource indicator’s URI reference (presently `u`)
+              to the relative path from the file of `rA` to that of `p`.
+            if( `isSubsumption` )
+                try
+                    + `referent( rAL )`
+                        : see `^^referent\( associative reference \)` @
+                          http://reluk.ca/project/Breccia/language_definition.brec
+                catch( broken reference, pattern not found )
+                    + Add `rA` to the stray references of the data store.
+                    + Warn of `(rA, u)`, ‘Stray reference `rA`: its referent could not be found
+                      in the subsumed instance of its referent file `u`, and therefore `rA`
+                      is left uninterned, referring outside the way model.’
+                    return+ `(rA, false)`
+            + Write `rAL` into the model in place of `rA`.
+            + Set `wasInterned` to true.
+            return+ `(rAL, wasInterned)`
+
+        intramodel path( standardized URI `u` )
+            : re `standardized` see `^^standardized\(`
+            : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
+            / The path proper to any intramodel instance of the referent of `u`.
+                : re `intramodel instance` see @ `^^- Regardless of the various forms of reference`
+            if( `u` begins with the canonical location `λ` of the local waycast )
+                return+ `u` relativized against `λ`
+            return+ the subsumption path derived from `u`
+                : re `subsumption path` see `are .+subsumed.+\R.+at a path formed as follows`
+
+        standardize( URI `u` )
+            : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
+            / Returns the standard form of `u` for subsumption purposes.
+            if( `u` lacks an authority component )
+                throw+ Malformed reference
+            if( `u` contains a subsumption path )
+                : re `subsumption path` see `are .+subsumed.+\R.+at a path formed as follows`
+                + Set `u` to the native location of the subsumed file.
+                    \ Now `u` *should* be in standard form.  But that, of course, does not suffice.
+            if( `u` refers to a waycast file )
+                + Set `u` to `canonicalize( u )`.
+                    : re `canonicalize` see `canonicalize\( URI` @ `^^ Canonical location$` @
+                      http://reluk.ca/project/wayic/cast/form_of_a_waycast.brec
+            else
+                + Set `u` to normal form.
+                    : see https://tools.ietf.org/html/rfc3986#section-6
+            return+ `u`
+
         subsume and patch referent( URI `u` )
             : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
             / Subsumes and patches the referent of `u` unless it is proper to the waycast
               or was already subsumed.  Returns the value of `intramodel path( u )`.
-                : re `intramodel path` see `^^intramodel path\(` @ `^^ Compilation$`
-            deem+ `v` a standardized URI, that of `standardize( u )`;
-                  `f` a file path, that of `intramodel path( v )`
-                : see `^^standardized\(` @ `^^ Compilation$`
-                : see `^^intramodel path\(` @ `^^ Compilation$`
+            deem+ `f` a file path;
+                  `λ` the location of a waycast;
+                  `uS` a standardized URI
+            if( `u` contains a subsumption path )
+                : re `subsumption path` see `are .+subsumed.+\R.+at a path formed as follows`
+                + Set `λ` to the location of the subsuming way model of `u`.
+                + Set `λ` to `canonicalize( λ )`.
+                    : re `canonicalize` see `canonicalize\( URI` @ `^^ Canonical location$` @
+                      http://reluk.ca/project/wayic/cast/form_of_a_waycast.brec
+                unless( `λλ` contains `λ` )
+                    throw+ Attempt to subsume file `u` through a model of waycast `λ`,
+                      unregistered as a subcast
+            + Set `uS` to `standardize( u )`.
+            + Set `f` to `intramodel path( uS )`.
             if( `f` is a subsumption path  &  no file is present at `f` )
-                : re `subsumption path` see `are .+subsumed.+ at a path formed as follows`
-                if( `v` refers to a waycast file )
-                    deem+ `λ` the waycast location of `v`
+                : re `subsumption path` see `are .+subsumed.+\R.+at a path formed as follows`
+                if( `uS` refers to a waycast file )
+                    + Set `λ` to the waycast location of `uS`.
                     unless( `λλ` contains `λ` )
                         throw+ Attempt to subsume file `u` native of waycast `λ`,
                           unregistered as a subcast
+                if( the referent of `u` is a directory )
+                    throw+ Unable to subsume referent: directory `u`
                 + Copy the referent of `u` to `f`.
                 for( each relative URI reference `r` in the copy )
                     + Replace `r` with an absolute reference, that of `r` resolved against `u`.
@@ -378,7 +397,6 @@ Form and compilation of way models
                           `p` a file path, that of `subsume and patch referent( u )`;
                           `wasInterned` a boolean flag
                     + Set `(j, wasInterned)` to `intern reference( j, u, p )`.
-                        : see `^^intern reference\(` @ `^^ Compilation$`
                     unless( wasInterned )
                         return+
             deem+ `f` a fractum;
@@ -410,7 +428,7 @@ Form and compilation of way models
                       application for the cause of `surcast targeting` or `prior-branch targeting`.
             ∴ File `t` in the model of `w` would be unsubsumed.
                 ∵ Subsumption of any file depends on its native waycast being registered as a subcast.
-                    : see `^^throw.+native of waycast.+\N.+unregistered as a subcast$` @
+                    : see `^^throw.+native of waycast.+\R.+unregistered as a subcast$` @
                       `^^subsume and patch referent\(`
             ∴ The model of `w` would apply to `t` no patch.
             ∴ The model of `w` would apply to `t` no patch declared by `w`.
