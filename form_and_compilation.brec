@@ -10,6 +10,11 @@ Form and compilation of way models
     - It results from compiling the waycast.
         : re `compiling` see `^^ Compilation$`
 
+    !! This method of patch-based modelling has gone out of hand.
+        : see @ ~/work/wayic/model/action_plan.brec
+        archive the present files+ before rebasing on any new design
+            : see @ ~/work/wayic/model/action_plan.brec
+
 
 
     ━━━━━━━━━━━━━
