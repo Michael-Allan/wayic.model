@@ -18,11 +18,13 @@ Definition of terms for project Way Modelling
     on-way
         ─ adjective and adverb
             - Being part of an aimed way of life.
-            - Being a thoroughfractum or thoroughfractal descendant within a way model
-              and thereby representing part of the way.
-    remote, of a waycast, waysource or cast file
+            - Being in a way model a thoroughfractum or a thoroughfractal descendant,
+              whether actual or subjoint, and thereby representing part of the way.
+    remote
         ─ adjective
-            - Not local.
+            - (of a waycast, waysource or cast file) Not local.
+            - (of referential markup) Containing a URI, thereby indicating a remote referent.
+                : re `URI` see https://tools.ietf.org/html/rfc3986#section-3
     subcast
         ─ noun
             - A waycast from which a way model subsumes one or more extracast files.
@@ -48,8 +50,8 @@ Definition of terms for project Way Modelling
             : see `^^thoroughfractum$`
     thoroughfractum
         ─ noun
-            - A wayfractum that models a way completely through to the endmost goal,
-              its head representing the goal and its body the means.
+            - A wayfractum that models a way completely through to the endmost goal, its head
+              representing the goal and its body the elaboration of and chosen means to the goal.
     way model
         ─ noun
             - The compiled, executable form of a waycast,
