@@ -7,7 +7,7 @@ Definition of terms for project Way Modelling
             - Not on-way.
     on-way
         ─ adjective and adverb
-            - Forming part of an aimed way of life.
+            - Forming part of a way.
             - Located as a thoroughfractum or thoroughfractal descendant, whether actual or subjoint,
               in a way model.
     pipe
@@ -30,11 +30,11 @@ Definition of terms for project Way Modelling
             - The compiled, executable form of a waycast,
               as opposed to the initial, written form of its source code.
                 : re `compiled.+` see same head @ form_and_compilation.brec
-            - A representation of an aimed way of life.
+            - A representation of a way.
                 : see @ form_and_compilation.brec
         ─ verb, mainly as the gerund ‘way modelling’
             - Compile the executable form of a waycast.
-            - Represent an aimed way of life.
+            - Represent a way.
 
 
-                                                    \ Copyright © 2020-2021  Michael Allan.  Licence MIT.
+                                                    \ Copyright © 2020-2022  Michael Allan.  Licence MIT.
