@@ -27,13 +27,10 @@ Definition of terms for project Way Modelling
               the goal and its body the elaboration of and chosen means to the goal.
     way model
         ─ noun
-            - The compiled, executable form of a waycast,
-              as opposed to the initial, written form of its source code.
-                : re `compiled.+` see same head @ form_and_compilation.brec
-            - A representation of a way.
-                : see @ form_and_compilation.brec
+            - A compiled form of a waycast that more explicitly represents the way.
+                : re `compiled.+represents the way` see @ form_and_compilation.brec
         ─ verb, mainly as the gerund ‘way modelling’
-            - Compile the executable form of a waycast.
+            - Form a way model.
             - Represent a way.
 
 

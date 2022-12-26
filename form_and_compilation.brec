@@ -1,12 +1,7 @@
 Form and compilation of way models
 
-    - A way model is the compiled, executable form of a waycast,
-      as opposed to the initial, written form of its source code.
-        : cf. `^+Simulacrum$` @ http://reluk.ca/project/Breccia/language_definition.brec
-        - A representation of a way.
-        - A Waybreccian simulacrum.
+    - A way model is a compiled form of a waycast that more explicitly represents the way.
     - It comprises a directory of files together with a data store.
-    - It results from compiling the waycast.
 
 
                                                     \ Copyright © 2020-2022  Michael Allan.  Licence MIT.
