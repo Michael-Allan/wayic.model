@@ -28,7 +28,7 @@ Definition of terms for project Way Modelling
     way model
         ─ noun
             - A compiled form of a waycast that more explicitly represents the way.
-                : re `compiled.+represents the way` see @ form_and_compilation.brec
+                : re `compiled.+represents the way` see `${same}` @ form_and_compilation.brec
         ─ verb, mainly as the gerund ‘way modelling’
             - Form a way model.
             - Represent a way.
